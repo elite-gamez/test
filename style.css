@@ -1,0 +1,172 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Arial Black', sans-serif;
+  background-color: #000;
+  color: white;
+  overflow-x: hidden;
+}
+
+#starfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Navbar Styles */
+.navbar {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: rgba(17, 17, 17, 0.6);
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px red, 0 0 25px orange;
+  z-index: 10;
+}
+
+.navbar .logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: orange;
+  text-shadow: 2px 2px 5px red, 0 0 10px orange;
+}
+
+.nav-links {
+  display: flex;
+  gap: 10px; /* Reduced spacing between items */
+}
+
+.nav-links a {
+  color: orange;
+  text-decoration: none;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px red, 0 0 6px orange;
+  transition: 0.3s;
+  padding: 6px 10px; /* Tighter padding */
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.nav-links a:hover,
+.nav-links .active-link {
+  color: red;
+  text-shadow: 2px 2px 8px red, 0 0 12px orange;
+}
+
+.center-content {
+  text-align: center;
+  padding-top: 180px;
+}
+
+.title {
+  font-size: 60px;
+  font-weight: bold;
+  color: orange;
+  text-shadow: 3px 3px 10px red, 0 0 20px orange;
+  margin-bottom: 30px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.search-bar input {
+  padding: 15px;
+  width: 60%;
+  max-width: 600px;
+  border: 2px solid red;
+  border-radius: 50px;
+  background-color: black;
+  color: white;
+  font-size: 18px;
+  outline: none;
+  box-shadow: 0 0 10px red, 0 0 20px orange;
+  text-shadow: 0 0 5px red;
+  transition: 0.3s;
+}
+
+.search-bar input:focus {
+  border-color: orange;
+  box-shadow: 0 0 15px orange, 0 0 30px red;
+}
+
+/* Chat Specific Styles */
+.chat-container {
+  margin: 0 auto;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 20px;
+  border: 2px solid;
+  height: 500px;
+  overflow: hidden;
+  box-shadow: 0 0 15px red, 0 0 30px orange;
+}
+
+#chatBox {
+  flex-grow: 1;
+  width: 100%;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  color: white;
+  font-size: 16px;
+  text-align: left;
+  height: 370px;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+}
+
+.input-container input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-family: 'Arial Black', sans-serif;
+  outline: none;
+  box-shadow: 0 0 8px red, 0 0 15px orange;
+}
+
+.input-container button {
+  background: none;
+  border: 2px solid white;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Arial Black', sans-serif;
+  font-size: 16px;
+  transition: background 0.3s;
+  box-shadow: 0 0 6px red, 0 0 12px orange;
+}
+
+.input-container button:hover {
+  background: white;
+  color: black;
+  box-shadow: 0 0 10px red, 0 0 20px orange;
+}

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Elite Gamez - Chat Room</title>
+  <style>
+    body {
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Arial Black', sans-serif;
+      overflow-x: hidden;
+      text-align: center;
+      padding-top: 30px;
+      position: relative;
+    }
+    canvas#starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .neon-text {
+      font-size: 50px;
+      font-weight: bold;
+      text-transform: uppercase;
+      animation: neonGlow 4s ease-in-out infinite alternate, colorCycle 15s linear infinite;
+      margin-bottom: 20px;
+      color: white;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 600px;
+      border: 2px solid;
+      border-radius: 20px;
+      padding: 20px;
+      animation: neonGlowInput 4s ease-in-out infinite alternate, colorCycle 15s linear infinite;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+    #chatBox {
+      flex-grow: 1;
+      width: 100%;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      color: white;
+      font-size: 16px;
+      text-align: left;
+    }
+    .input-container {
+      display: flex;
+      width: 100%;
+      gap: 10px;
+    }
+    .input-container input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-family: 'Arial Black', sans-serif;
+      outline: none;
+    }
+    .input-container button {
+      background: none;
+      border: 2px solid white;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-family: 'Arial Black', sans-serif;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    .input-container button:hover {
+      background: white;
+      color: black;
+    }
+
+    @keyframes neonGlow {
+      from { text-shadow: 0 0 10px #00f, 0 0 20px #00f; }
+      to   { text-shadow: 0 0 5px #00f, 0 0 10px #00f; }
+    }
+
+    @keyframes neonGlowInput {
+      from { box-shadow: 0 0 10px #fff, 0 0 20px currentColor; }
+      to   { box-shadow: 0 0 5px #fff, 0 0 10px currentColor; }
+    }
+
+    @keyframes colorCycle {
+      0%, 100% { color: #00ff00; }
+      25% { color: #ff00de; }
+      50% { color: #00ffff; }
+      75% { color: #ff4500; }
+    }
+
+    .ali-name {
+      color: #00f;
+      text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
+    }
+    .rainbow-text {
+      font-weight: bold;
+      font-size: 16px;
+      animation: rainbowText 5s linear infinite;
+    }
+    @keyframes rainbowText {
+      0% { color: red; }
+      25% { color: yellow; }
+      50% { color: green; }
+      75% { color: blue; }
+      100% { color: purple; }
+    }
+    .fernando-name {
+      color: orange;
+      text-shadow: 0 0 10px orange;
+    }
+    .fernando-msg {
+      color: red;
+    }
+    .system-name {
+      color: #00f;
+      text-shadow: 0 0 10px #00f;
+    }
+    .system-msg {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="neon-text">Elite Gamez Chat</div>
+
+<div class="chat-container">
+  <div id="chatBox"></div>
+  <div class="input-container">
+    <input type="text" id="usernameInput" placeholder="Username & press Enter">
+    <input type="text" id="messageInput" placeholder="Type a message..." disabled>
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-app.js";
+  import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-database.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAwhw2sUtZZnWOAwv_5eIeBOWXAN1Uz2iM",
+    authDomain: "global-chat-69b72.firebaseapp.com",
+    databaseURL: "https://global-chat-69b72-default-rtdb.firebaseio.com",
+    projectId: "global-chat-69b72",
+    storageBucket: "global-chat-69b72.appspot.com",
+    messagingSenderId: "384029422115",
+    appId: "1:384029422115:web:5dc9da0f08f1e1cdfab796",
+    measurementId: "G-0YQ7D6DL5D"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getDatabase(app);
+
+  const chatBox = document.getElementById('chatBox');
+  const usernameInput = document.getElementById('usernameInput');
+  const messageInput = document.getElementById('messageInput');
+
+  let username = '';
+  let userIP = '';
+
+  // Get user IP for logging (optional)
+  fetch('https://api.ipify.org?format=json')
+    .then(res => res.json())
+    .then(data => userIP = data.ip);
+
+  usernameInput.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      let name = usernameInput.value.trim();
+
+      if (!name) {
+        alert('Username cannot be empty.');
+        return;
+      }
+
+      // Special usernames with restrictions
+      if (name === '*/Ali') {
+        username = 'Ali';
+      } else if (name === '!*/Fernando') {
+        username = 'Fernando';
+      } else if (name === '*/☻System☻') {
+        username = '☻System☻';
+      } else if (name.startsWith('Ali') || name.startsWith('Fernando') || name.startsWith('System')) {
+        alert('Use the exact username: */Ali or !*/Fernando');
+        usernameInput.value = '';
+        return;
+      } else {
+        username = name;
+      }
+
+      usernameInput.disabled = true;
+      messageInput.disabled = false;
+      messageInput.focus();
+
+      // Push user info to database (optional)
+      push(ref(db, "users"), {
+        user: username,
+        ip: userIP,
+        timestamp: Date.now()
+      });
+    }
+  });
+
+  function escapeHTML(str) {
+    return str.replace(/[&<>"']/g, m => (
+      {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'}[m]
+    ));
+  }
+
+  function sanitizeMessage(msg) {
+    return msg.replace(/<\/?[^>]+>/gi, '').replace(/\b(?:https?:\/\/|www\.)\S+/gi, '[link removed]');
+  }
+
+  async function sendMessage() {
+    if (!username) {
+      alert('Enter username first.');
+      return;
+    }
+
+    let message = messageInput.value.trim();
+    if (!message) return;
+
+    message = sanitizeMessage(message);
+
+    // Push user message
+    push(ref(db, "messages"), {
+      user: username,
+      text: message,
+      timestamp: Date.now()
+    });
+
+    // AI command handler
+    if (message.startsWith('/ai')) {
+      const prompt = message.replace('/ai', '').trim();
+      if (!prompt) return;
+
+      const GEMINI_API_KEY = 'AIzaSyCd-_IKmVeizyqLp8NP2ar5eYhXnBAPGvU';
+      const GEMINI_API_URL = 'https://gemini.api.harmonylabs.ai/v1/chat/completions';
+
+      try {
+        const response = await fetch(GEMINI_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GEMINI_API_KEY}`
+          },
+          body: JSON.stringify({
+            messages: [{ role: 'user', content: prompt }],
+            model: 'gemini-1r',
+            temperature: 0.7
+          })
+        });
+
+        if (!response.ok) throw new Error('API error');
+
+        const data = await response.json();
+        const aiResponse = data.choices?.[0]?.message?.content || 'AI did not respond.';
+
+        // Push AI response to chat
+        push(ref(db, "messages"), {
+          user: "☻System☻",
+          text: aiResponse,
+          timestamp: Date.now()
+        });
+      } catch (error) {
+        push(ref(db, "messages"), {
+          user: "☻System☻",
+          text: "Error fetching AI response.",
+          timestamp: Date.now()
+        });
+      }
+    }
+
+    messageInput.value = '';
+  }
+
+  // Listen for new messages
+  onChildAdded(ref(db, "messages"), (snapshot) => {
+    const { user, text, timestamp } = snapshot.val();
+    addMessage(user, text, timestamp);
+  });
+
+  function addMessage(user, text, timestamp) {
+    if (!text || text.trim() === '') return;
+
+    const messageEl = document.createElement('div');
+    const time = new Date(timestamp);
+    const timeString = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    // Style user names specially
+    let userSpan = `<span style="font-weight:bold;">${escapeHTML(user)}</span>`;
+    let msgSpan = escapeHTML(text);
+
+    if (user === "Ali") {
+      userSpan = `<span class="ali-name">Ali</span>`;
+      msgSpan = `<span class="rainbow-text">${escapeHTML(text)}</span>`;
+    } else if (user === "Fernando") {
+      userSpan = `<span class="fernando-name">Fernando</span>`;
+      msgSpan = `<span class="fernando-msg">${escapeHTML(text)}</span>`;
+    } else if (user === "☻System☻") {
+      userSpan = `<span class="system-name">☻System☻</span>`;
+      msgSpan = `<span class="system-msg">${escapeHTML(text)}</span>`;
+    }
+
+    messageEl.innerHTML = `<strong>${userSpan}</strong> [${timeString}]: ${msgSpan}`;
+    chatBox.appendChild(messageEl);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  // Enable send on Enter key in message input
+  messageInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  });
+
+  // Starfield background animation
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  const numStars = 200;
+
+  function initStars() {
+    stars = [];
+    for (let i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        z: Math.random() * window.innerWidth,
+        o: Math.random()
+      });
+    }
+  }
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initStars();
+  }
+
+  function moveStars() {
+    for (let star of stars) {
+      star.z -= 2;
+      if (star.z <= 0) {
+        star.x = Math.random() * window.innerWidth;
+        star.y = Math.random() * window.innerHeight;
+        star.z = window.innerWidth;
+        star.o = Math.random();
+      }
+    }
+  }
+
+  function drawStars() {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let star of stars) {
+      const k = 128.0 / star.z;
+      const x = (star.x - window.innerWidth / 2) * k + window.innerWidth / 2;
+      const y = (star.y - window.innerHeight / 2) * k + window.innerHeight / 2;
+      const size = (1 - star.z / window.innerWidth) * 3;
+      const opacity = star.o;
+
+      if (x >= 0 && x <= window.innerWidth && y >= 0 && y <= window.innerHeight) {
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  function animate() {
+    moveStars();
+    drawStars();
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+  animate();
+
+</script>
+
+</body>
+</html>

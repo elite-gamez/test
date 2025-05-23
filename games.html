@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Games - Elite Gamez</title>
+  <style>
+    /* Your provided CSS */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Arial Black', sans-serif;
+      background-color: #000;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    #starfield {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      position: fixed;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(17, 17, 17, 0.6);
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px red, 0 0 25px orange;
+      z-index: 10;
+    }
+
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: orange;
+      text-shadow: 2px 2px 5px red, 0 0 10px orange;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: orange;
+      text-decoration: none;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px red, 0 0 6px orange;
+      transition: 0.3s;
+      padding: 8px 14px;
+      border-radius: 12px;
+    }
+
+    .nav-links a:hover,
+    .nav-links .active-link {
+      color: red;
+      text-shadow: 2px 2px 8px red, 0 0 12px orange;
+    }
+
+    .center-content {
+      text-align: center;
+      padding-top: 180px;
+    }
+
+    .title {
+      font-size: 60px;
+      font-weight: bold;
+      color: orange;
+      /* Red and orange shadow */
+      text-shadow: 3px 3px 10px red, 0 0 20px orange;
+      margin-bottom: 30px;
+    }
+
+    /* === New game box styles === */
+    .game-container {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 18px;
+    }
+
+    .game-box {
+      background: #220700;
+      border-radius: 16px;
+      padding: 15px 10px;
+      box-shadow: 0 0 14px 4px rgba(255, 69, 0, 0.7);
+      cursor: pointer;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      text-align: center;
+      user-select: none;
+    }
+
+    .game-box:hover {
+      box-shadow: 0 0 25px 7px rgba(255, 99, 71, 0.9);
+      transform: scale(1.1);
+    }
+
+    .game-title {
+      color: #ffb87a;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      display: block;
+      padding: 8px 5px;
+      transition: color 0.3s ease;
+    }
+
+    .game-title:hover {
+      color: #ff4500;
+      text-shadow: 0 0 8px #ff4500;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="starfield"></canvas>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">Elite Gamez</div>
+    <div class="nav-links">
+      <a href="search.html">Home</a>
+      <a href="games.html" class="active-link">Games</a>
+      <a href="movies.html">Movies</a>
+      <a href="chatroom.html">Chatroom</a>
+      <a href="ai.html">AI</a>
+      <a href="contact.html">contact</a>
+      <a href="partners.html">Partners</a>
+      <a href="settings.html">Settings</a>
+    </div>
+  </div>
+
+  <!-- Page Title -->
+  <div class="center-content">
+    <div class="title">Games</div>
+  </div>
+
+  <!-- Game Cards -->
+  <div class="game-container">
+    <div class="game-box"><a href="#" class="game-title">1</a></div>
+    <div class="game-box"><a href="#" class="game-title">Speed Rush X</a></div>
+    <div class="game-box"><a href="#" class="game-title">Battle Core</a></div>
+    <div class="game-box"><a href="#" class="game-title">HackZone</a></div>
+    <div class="game-box"><a href="#" class="game-title">Neon Nights</a></div>
+    <div class="game-box"><a href="#" class="game-title">Sky Forge</a></div>
+    <div class="game-box"><a href="#" class="game-title">Pixel Racer</a></div>
+    <div class="game-box"><a href="#" class="game-title">Astro Siege</a></div>
+    <div class="game-box"><a href="#" class="game-title">Void Jumper</a></div>
+    <div class="game-box"><a href="#" class="game-title">Cyber Climb</a></div>
+    <div class="game-box"><a href="#" class="game-title">Laser Maze</a></div>
+    <div class="game-box"><a href="#" class="game-title">Glitch Wars</a></div>
+    <div class="game-box"><a href="#" class="game-title">Mech Arena</a></div>
+    <div class="game-box"><a href="#" class="game-title">Robo Run</a></div>
+    <div class="game-box"><a href="#" class="game-title">Neon Chess</a></div>
+    <div class="game-box"><a href="#" class="game-title">Code Breaker</a></div>
+    <div class="game-box"><a href="#" class="game-title">Pixel Tower</a></div>
+    <div class="game-box"><a href="#" class="game-title">Orbital Drift</a></div>
+    <div class="game-box"><a href="#" class="game-title">Drone Dash</a></div>
+    <div class="game-box"><a href="#" class="game-title">Quantum Race</a></div>
+  </div>
+
+  <script src="starfield.js"></script>
+
+</body>
+</html>

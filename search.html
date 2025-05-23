@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search - Elite Gamez</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- Navbar -->
+<div class="navbar">
+  <div class="logo">Elite Gamez</div>
+  <div class="nav-links">
+    <a href="search.html" style="color:red;">Home</a>
+    <a href="games.html" >Games</a>
+    <a href="movies.html" >Movies</a>
+    <a href="chatroom.html" >Chatroom</a>
+    <a href="ai.html" >AI</a>
+    <a href="contact.html">contact</a>
+    <a href="partners.html">Partners</a>
+    <a href="settings.html" >Settings</a>
+  </div>
+</div>
+
+<!-- Center content -->
+<div class="center-content">
+  <div class="title">Search</div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search freely with Elite Gamez...">
+  </div>
+</div>
+
+<script src="starfield.js"></script>
+<script src="luma/embed.js"></script>
+
+<!-- Luma Proxy Launcher -->
+<style>
+  #luma-launcher {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 9999;
+  }
+  #luma-url-input {
+    display: none;
+    margin-top: 8px;
+    width: 220px;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #555;
+    outline: none;
+    background-color: #111;
+    color: white;
+  }
+  #enter-proxy {
+    display: none;
+    margin-top: 5px;
+    background-color: orange;
+    color: black;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  #browse-btn {
+    background-color: #222;
+    color: white;
+    border: 1px solid #444;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+
+<div id="luma-launcher">
+  <button id="browse-btn" onclick="showProxyInput()">Browse via Proxy</button><br>
+  <input type="text" id="luma-url-input" placeholder="Enter URL here..."><br>
+  <button id="enter-proxy" onclick="launchLumaProxy()">Enter</button>
+</div>
+
+<script>
+  function showProxyInput() {
+    document.getElementById('luma-url-input').style.display = 'inline-block';
+    document.getElementById('enter-proxy').style.display = 'inline-block';
+  }
+
+  function launchLumaProxy() {
+    const url = document.getElementById('luma-url-input').value;
+    if (!url) return;
+    window.location.href = '/luma/embed.html#' + encodeURIComponent(url);
+  }
+</script>
+
+</body>
+</html>
